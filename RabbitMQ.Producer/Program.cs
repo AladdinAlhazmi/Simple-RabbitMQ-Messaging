@@ -1,10 +1,5 @@
+using System.Text;
 using RabbitMQ.Client;
-
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-
-
-app.Run();
 
 
 // This is a placeholder for the RabbitMQ Producer application.
@@ -22,7 +17,7 @@ await channel.QueueDeclareAsync(
 for (int i = 0; i < 10; i++)
 {
     var message = $"{DateTime.UtcNow} - Message {i}";
-    var body = System.Text.Encoding.UTF8.GetBytes(message);
+    var body = Encoding.UTF8.GetBytes(message);
     await channel.BasicPublishAsync(
         exchange: string.Empty,
         routingKey: "message",
@@ -30,5 +25,5 @@ for (int i = 0; i < 10; i++)
         basicProperties: new BasicProperties { Persistent = true},
         body: body);
     Console.WriteLine($"Sent: {message}");
-    await Task.Delay(2000); // Simulate some delay between messages
+    await Task.Delay(1000); // Simulate some delay between messages
 }
